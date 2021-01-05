@@ -2,19 +2,36 @@
 
 #include <stdexcept>
 #include <SDL2/SDL.h>
+#include <vector>
+#include <math/point.h>
+#include <k_means/k_means.h>
+#include <map>
 
 class Renderer {
 private:
-    SDL_Window *window_;
-    SDL_Renderer *renderer_;
+    SDL_Window *_window;
+    SDL_Renderer *_renderer;
 
-    int width_{500};
-    int height_{500};
+    std::string _title{"K-Means Implementation"};
 
-    bool running_{false};
+    int _width{500};
+    int _height{500};
+
+    std::vector<Point> _points;
+
+    bool _running{false};
+
+    KMeans _kmeans{2, _width, _height, _points};
+
+    std::map<int, SDL_Color> _colors{
+            {0, {255, 0, 0,   255}},
+            {1, {0,   0, 255, 255}}
+    };
 
 private:
-    void handle_events_();
+    void _handle_events();
+
+    void _handle_mouse_press_up(SDL_MouseButtonEvent &event);
 
 public:
     Renderer();
@@ -23,6 +40,6 @@ public:
 
     void render();
 
-    [[nodiscard]] inline bool is_running() const { return running_; }
+    [[nodiscard]] inline bool is_running() const { return _running; }
 };
 
